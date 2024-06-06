@@ -69,3 +69,42 @@ class BST:
             actual = actual.izquierdo
         return actual
     
+
+"""Interfaz"""
+
+def menu():
+    print("1. Registrar estudiante")
+    print("2. Buscar estudiante")
+    print("3. Eliminar estudiante")
+    print("4. Salir")
+
+arbol = BST()
+
+while True:
+    menu()
+    opcion = int(input("Seleccione una opción: "))
+
+    if opcion == 1:
+        matricula = int(input("Número de matrícula: "))
+        nombre = input("Nombre del estudiante: ")
+        arbol.insertar(matricula, {"nombre": nombre})
+        print("Estudiante registrado.\n")
+
+    elif opcion == 2:
+        matricula = int(input("Número de matrícula: "))
+        estudiante = arbol.buscar(matricula)
+        if estudiante:
+            print(f"Estudiante encontrado: {estudiante.info_estudiante}\n")
+        else:
+            print("Estudiante no encontrado.\n")
+
+    elif opcion == 3:
+        matricula = int(input("Número de matrícula: "))
+        arbol.eliminar(matricula)
+        print("Estudiante eliminado.\n")
+
+    elif opcion == 4:
+        break
+
+    else:
+        print("Opción no válida.\n")
