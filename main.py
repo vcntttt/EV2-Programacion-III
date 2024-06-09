@@ -21,6 +21,11 @@ class Interfaz:
         nombreCurso = self.course_name_entry.get()
         dependencias = self.course_dependencies_entry.get()
         dependenciasList = dependencias.split(",") if dependencias != "" else []
+
+        if self.avl.encontrarCurso(cursoID):
+            messagebox.showerror("Error", "El ID del curso ya existe.")
+            return
+
         curso = Curso(cursoID, nombreCurso, dependenciasList)
         nodoCurso = NodoGrafo(curso.getInfo())
 
@@ -112,6 +117,11 @@ class Interfaz:
     def add_student(self):
         student_id = self.student_id_entry.get()
         student_name = self.student_name_entry.get()
+
+        if self.bst.buscar(int(student_id)):
+            messagebox.showerror("Error", "El ID del estudiante ya existe.")
+            return
+
         if student_id and student_name:
             estudiante = Estudiante(int(student_id), student_name)
             self.bst.insertar(estudiante)
