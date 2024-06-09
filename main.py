@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from grafo import Grafo
 
 class Interfaz():
     def __init__(self, root):
@@ -9,7 +10,7 @@ class Interfaz():
         self.root.resizable(False, False)
         # self.bst = BST()
         # self.avl = AVL()
-        # self.graph = Grafo()
+        self.graph = Grafo()
 
         self.setup_ui()
 
