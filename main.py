@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from avl import AVL
 from grafo import Grafo
 
 class Interfaz():
@@ -9,10 +10,13 @@ class Interfaz():
         self.root.geometry("500x400")
         self.root.resizable(False, False)
         # self.bst = BST()
-        # self.avl = AVL()
+        self.avl = AVL()
         self.graph = Grafo()
 
         self.setup_ui()
+
+    def addCourse(self):
+        pass
 
     def setup_ui(self):
         self.notebook = ttk.Notebook(self.root)
@@ -59,12 +63,15 @@ class Interfaz():
         self.course_id_entry.grid(row=0, column=1)
         self.course_name_entry = tk.Entry(frame)
         self.course_name_entry.grid(row=1, column=1)
+        self.course_dependencies_entry = tk.Entry(frame)
+        self.course_dependencies_entry.grid(row=2, column=1)
 
         tk.Label(frame, text="ID del Curso").grid(row=0, column=0)
         tk.Label(frame, text="Nombre del Curso").grid(row=1, column=0)
+        tk.Label(frame, text="Curso Requerido").grid(row=2, column=0) # Nombre del curso requerido
 
-        # tk.Button(frame, text="Agregar Curso",
-        #           command=self.add_course).grid(row=2, column=0)
+        tk.Button(frame, text="Agregar Curso",
+                  command=self.addCourse).grid(row=3, column=0)
         # tk.Button(frame, text="Buscar Curso",
         #           command=self.search_course).grid(row=2, column=1)
 
