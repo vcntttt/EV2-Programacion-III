@@ -1,10 +1,10 @@
+from nodo import nodeAVL
+
 class Curso:
-    def __init__(self, nombre, requisitos, codigo, descripcion, semestre):
-        self.nombre = nombre
+    def __init__(self, codigo, nombre, dependencias):
         self.codigo = codigo
-        self.requisitos = requisitos
-        self.descripcion = descripcion
-        self.semestre = semestre
+        self.nombre = nombre
+        self.dependencias = dependencias # []
 
     def getName(self):
         return self.nombre
@@ -13,33 +13,16 @@ class Curso:
         return self.codigo 
 
     def getRequirements(self):
-        return self.requisitos
-
-    def getDescription(self):
-        return self.descripcion
-    
-    def getSemestre(self):
-        return self.semestre
+        return self.dependencias
 
     def setName(self, name):
         self.nombre = name
 
     def setCode(self, code):
         self.codigo = code
-
-    def setRequirements(self, requirements):
-        self.requisitos = requirements
-
-    def setDescription(self, description):
-        self.descripcion = description
-
-class nodeAVL:
-    def __init__(self, curso):
-        self.curso = curso
-        self.izquierda = None
-        self.derecha = None
-        self.altura = 0
-
+    def getInfo(self):
+        return f"{self.nombre}({self.codigo})"
+    
 class AVL:
     def __init__(self):
         self.root = None

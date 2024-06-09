@@ -12,3 +12,10 @@ class NodoBST:
         self.estudiante = estudiante
         self.izquierda = None
         self.derecha = None
+        
+class nodeAVL:
+    def __init__(self, curso):
+        self.curso = curso
+        self.izquierda = None
+        self.derecha = None
+        self.altura = 0

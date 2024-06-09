@@ -1,10 +1,8 @@
-from tkinter import messagebox
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from avl import AVL, Curso
 from grafo import Grafo, Edge
 from nodo import NodoGrafo
-from BST import BST
 
 class Interfaz():
     def __init__(self, root):
@@ -12,7 +10,7 @@ class Interfaz():
         self.root.title("6 - Sistema de Administración Escolar")
         self.root.geometry("500x500")
         self.root.resizable(False, False)
-        self.bst = BST()
+        # self.bst = BST()
         self.avl = AVL()
         self.grafo = Grafo()
         self.setupUI()
@@ -101,17 +99,19 @@ class Interfaz():
         tk.Label(frame, text="ID del Estudiante").grid(row=0, column=0)
         tk.Label(frame, text="Nombre del Estudiante").grid(row=1, column=0)
 
-        tk.Button(frame, text="Agregar Estudiante", command=self.add_student).grid(row=2, column=0, columnspan=2)
-        tk.Button(frame, text="Buscar Estudiante", command=self.search_student).grid(row=3, column=0, columnspan=2)
-        tk.Button(frame, text="Eliminar Estudiante", command=self.delete_student).grid(row=4, column=0, columnspan=2)
+        # tk.Button(frame, text="Agregar Estudiante",
+        #           command=self.add_student).grid(row=2, column=0)
+        # tk.Button(frame, text="Buscar Estudiante",
+        #           command=self.search_student).grid(row=2, column=1)
+        # tk.Button(frame, text="Eliminar Estudiante",
+        #           command=self.delete_student).grid(row=2, column=2)
 
-        # Listbox to display students
         self.student_listbox = tk.Listbox(frame, width=40)
         self.student_listbox.grid(row=5, column=0, columnspan=2, pady=10)
 
         self.result_label = tk.Label(frame, text="")
         self.result_label.grid(row=6, column=0, columnspan=2)
-
+        
     def setup_course_ui(self, tab):
         frame = tk.LabelFrame(
             tab, text="Gestión de Cursos", padx=10, pady=10)

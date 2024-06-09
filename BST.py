@@ -5,7 +5,6 @@ class Estudiante:
         self.matricula = matricula
         self.nombre = nombre
 
-
 class BST:
     def __init__(self):
         self.raiz = None
