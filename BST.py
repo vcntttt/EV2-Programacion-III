@@ -67,3 +67,14 @@ class BST:
         while actual.izquierda is not None:
             actual = actual.izquierda
         return actual
+
+    def inorder(self):
+        estudiantes = []
+        self._inorder(self.raiz, estudiantes)
+        return estudiantes
+
+    def _inorder(self, nodo, estudiantes):
+        if nodo:
+            self._inorder(nodo.izquierda, estudiantes)
+            estudiantes.append(nodo.estudiante)
+            self._inorder(nodo.derecha, estudiantes)

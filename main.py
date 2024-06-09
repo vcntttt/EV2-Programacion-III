@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 from avl import AVL, Curso
 from grafo import Grafo, Edge
 from nodo import NodoGrafo
-from BST import BST
+from BST import BST,Estudiante
 
 # TODO: toda la seccion de estudiantes y manejo de errores en toda la aplicación
 
@@ -100,12 +100,54 @@ class Interfaz():
         tk.Label(frame, text="ID del Estudiante").grid(row=0, column=0)
         tk.Label(frame, text="Nombre del Estudiante").grid(row=1, column=0)
 
-        # tk.Button(frame, text="Agregar Estudiante",
-        #           command=self.add_student).grid(row=2, column=0)
-        # tk.Button(frame, text="Buscar Estudiante",
-        #           command=self.search_student).grid(row=2, column=1)
-        # tk.Button(frame, text="Eliminar Estudiante",
-        #           command=self.delete_student).grid(row=2, column=2)
+        tk.Button(frame, text="Agregar Estudiante",
+                command=self.add_student).grid(row=2, column=0)
+        tk.Button(frame, text="Buscar Estudiante",
+                command=self.search_student).grid(row=2, column=1)
+        tk.Button(frame, text="Eliminar Estudiante",
+                command=self.delete_student).grid(row=2, column=2)
+
+        self.treeStudents = ttk.Treeview(frame, columns=("ID", "Nombre"), show='headings')
+        self.treeStudents.heading("ID", text="ID")
+        self.treeStudents.heading("Nombre", text="Nombre")
+        self.treeStudents.grid(row=3, column=0, columnspan=3, padx=5, pady=5, sticky="nsew")
+
+        frame.grid_rowconfigure(3, weight=1)
+        frame.grid_columnconfigure(1, weight=1)
+
+    def add_student(self):
+        student_id = self.student_id_entry.get()
+        student_name = self.student_name_entry.get()
+        if student_id and student_name:
+            estudiante = Estudiante(int(student_id), student_name)
+            self.bst.insertar(estudiante)
+            self.treeStudents.insert("", tk.END, values=(student_id, student_name))
+            self.student_id_entry.delete(0, tk.END)
+            self.student_name_entry.delete(0, tk.END)
+            messagebox.showinfo("Éxito", "Estudiante agregado")
+
+    def search_student(self):
+        student_id = int(self.student_id_entry.get())
+        result = self.bst.buscar(student_id)
+        if result:
+            messagebox.showinfo(
+                "Resultado", f"Estudiante encontrado: ID - {result.estudiante.matricula}, Nombre - {result.estudiante.nombre}")
+        else:
+            messagebox.showerror("Error", "Estudiante no encontrado")
+
+    def delete_student(self):
+        student_id = self.student_id_entry.get()
+        if student_id:
+            self.bst.eliminar(int(student_id))
+            self.refresh_student_list()
+            messagebox.showinfo("Éxito", "Estudiante eliminado")
+
+    def refresh_student_list(self):
+        for item in self.treeStudents.get_children():
+            self.treeStudents.delete(item)
+        estudiantes = self.bst.inorder()
+        for estudiante in estudiantes:
+            self.treeStudents.insert("", tk.END, values=(estudiante.matricula, estudiante.nombre))
         
     def setup_course_ui(self, tab):
         frame = tk.LabelFrame(
