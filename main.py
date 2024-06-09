@@ -4,7 +4,6 @@ from avl import AVL
 from grafo import Grafo
 
 
-
 class Interfaz():
     def __init__(self, root):
         self.root = root
@@ -16,11 +15,21 @@ class Interfaz():
         self.graph = Grafo()
 
         self.students = []  
+        self.courses = [] 
 
         self.setup_ui()
 
     def addCourse(self):
-        pass
+        course_id = self.course_id_entry.get()
+        course_name = self.course_name_entry.get()
+        course_dependencies = self.course_dependencies_entry.get()
+
+        if course_id and course_name:
+            self.courses.append((course_id, course_name, course_dependencies))
+            self.course_listbox.insert(tk.END, f"ID: {course_id}, Nombre: {course_name}, Requerido: {course_dependencies}")
+            self.course_id_entry.delete(0, tk.END)
+            self.course_name_entry.delete(0, tk.END)
+            self.course_dependencies_entry.delete(0, tk.END)
 
     def setup_ui(self):
         self.notebook = ttk.Notebook(self.root)
@@ -82,12 +91,14 @@ class Interfaz():
 
         tk.Label(frame, text="ID del Curso").grid(row=0, column=0)
         tk.Label(frame, text="Nombre del Curso").grid(row=1, column=0)
-        tk.Label(frame, text="Curso Requerido").grid(row=2, column=0) # Nombre del curso requerido
+        tk.Label(frame, text="Curso Requerido").grid(row=2, column=0)  # Nombre del curso requerido
 
         tk.Button(frame, text="Agregar Curso",
-                  command=self.addCourse).grid(row=3, column=0)
-        # tk.Button(frame, text="Buscar Curso",
-        #           command=self.search_course).grid(row=2, column=1)
+                  command=self.addCourse).grid(row=3, column=0, columnspan=2)
+
+        # Listbox to display courses
+        self.course_listbox = tk.Listbox(frame, width=40)
+        self.course_listbox.grid(row=4, column=0, columnspan=2, pady=10)
 
     def setup_dependency_ui(self, parent_frame):
         frame = tk.LabelFrame(
