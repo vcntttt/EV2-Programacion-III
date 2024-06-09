@@ -3,11 +3,9 @@ from tkinter import ttk, messagebox
 from avl import AVL, Curso
 from grafo import Grafo, Edge
 from nodo import NodoGrafo
-from BST import BST,Estudiante
+from BST import BST, Estudiante
 
-# TODO: toda la seccion de estudiantes y manejo de errores en toda la aplicación
-
-class Interfaz():
+class Interfaz:
     def __init__(self, root):
         self.root = root
         self.root.title("6 - Sistema de Administración Escolar")
@@ -24,7 +22,7 @@ class Interfaz():
         dependencias = self.course_dependencies_entry.get()
         dependenciasList = dependencias.split(",") if dependencias != "" else []
         curso = Curso(cursoID, nombreCurso, dependenciasList)
-        nodoCurso = NodoGrafo(curso.getInfo()) # nombre(codigo)
+        nodoCurso = NodoGrafo(curso.getInfo())
 
         self.avl.anadirCurso(curso)
         self.grafo.addVertice(nodoCurso)
@@ -55,21 +53,21 @@ class Interfaz():
             messagebox.showerror("Error", "Curso no encontrado")
 
     def encontrarCamino(self):
-            curso_inicio = self.curso_inicio_entry.get().strip()
-            curso_fin = self.curso_fin_entry.get().strip()
-            nodo_inicio = self.grafo.getVertice(curso_inicio)
-            nodo_fin = self.grafo.getVertice(curso_fin)
+        curso_inicio = self.curso_inicio_entry.get().strip()
+        curso_fin = self.curso_fin_entry.get().strip()
+        nodo_inicio = self.grafo.getVertice(curso_inicio)
+        nodo_fin = self.grafo.getVertice(curso_fin)
 
-            if nodo_inicio is None or nodo_fin is None:
-                messagebox.showerror("Error", "Uno o ambos cursos no existen.")
-                return
+        if nodo_inicio is None or nodo_fin is None:
+            messagebox.showerror("Error", "Uno o ambos cursos no existen.")
+            return
 
-            camino = self.grafo.findPath(nodo_inicio, nodo_fin)
-            if camino:
-                camino_str = " -> ".join([n.getInfo() for n in camino])
-                messagebox.showinfo("Camino más corto", f"El camino más corto es: {camino_str}")
-            else:
-                messagebox.showinfo("Camino más corto", "No hay camino disponible entre los cursos seleccionados.")
+        camino = self.grafo.findPath(nodo_inicio, nodo_fin)
+        if camino:
+            camino_str = " -> ".join([n.getInfo() for n in camino])
+            messagebox.showinfo("Camino más corto", f"El camino más corto es: {camino_str}")
+        else:
+            messagebox.showinfo("Camino más corto", "No hay camino disponible entre los cursos seleccionados.")
 
     def setupUI(self):
         self.notebook = ttk.Notebook(self.root)
@@ -88,8 +86,7 @@ class Interfaz():
         self.setup_dependency_ui(self.dependency_tab)
 
     def setup_student_ui(self, tab):
-        frame = tk.LabelFrame(
-            tab, text="Gestión de Estudiantes", padx=10, pady=10)
+        frame = tk.LabelFrame(tab, text="Gestión de Estudiantes", padx=10, pady=10)
         frame.pack(padx=10, pady=10)
 
         self.student_id_entry = tk.Entry(frame)
@@ -100,12 +97,9 @@ class Interfaz():
         tk.Label(frame, text="ID del Estudiante").grid(row=0, column=0)
         tk.Label(frame, text="Nombre del Estudiante").grid(row=1, column=0)
 
-        tk.Button(frame, text="Agregar Estudiante",
-                command=self.add_student).grid(row=2, column=0)
-        tk.Button(frame, text="Buscar Estudiante",
-                command=self.search_student).grid(row=2, column=1)
-        tk.Button(frame, text="Eliminar Estudiante",
-                command=self.delete_student).grid(row=2, column=2)
+        tk.Button(frame, text="Agregar Estudiante", command=self.add_student).grid(row=2, column=0)
+        tk.Button(frame, text="Buscar Estudiante", command=self.search_student).grid(row=2, column=1)
+        tk.Button(frame, text="Eliminar Estudiante", command=self.delete_student).grid(row=2, column=2)
 
         self.treeStudents = ttk.Treeview(frame, columns=("ID", "Nombre"), show='headings')
         self.treeStudents.heading("ID", text="ID")
@@ -125,15 +119,19 @@ class Interfaz():
             self.student_id_entry.delete(0, tk.END)
             self.student_name_entry.delete(0, tk.END)
             messagebox.showinfo("Éxito", "Estudiante agregado")
+        else:
+            messagebox.showerror("Error", "ID y Nombre del estudiante son requeridos")
 
     def search_student(self):
-        student_id = int(self.student_id_entry.get())
-        result = self.bst.buscar(student_id)
-        if result:
-            messagebox.showinfo(
-                "Resultado", f"Estudiante encontrado: ID - {result.estudiante.matricula}, Nombre - {result.estudiante.nombre}")
+        student_id = self.student_id_entry.get()
+        if student_id:
+            result = self.bst.buscar(int(student_id))
+            if result:
+                messagebox.showinfo("Resultado", f"Estudiante encontrado: ID - {result.estudiante.matricula}, Nombre - {result.estudiante.nombre}")
+            else:
+                messagebox.showerror("Error", "Estudiante no encontrado")
         else:
-            messagebox.showerror("Error", "Estudiante no encontrado")
+            messagebox.showerror("Error", "Ingrese el ID del estudiante")
 
     def delete_student(self):
         student_id = self.student_id_entry.get()
@@ -141,6 +139,8 @@ class Interfaz():
             self.bst.eliminar(int(student_id))
             self.refresh_student_list()
             messagebox.showinfo("Éxito", "Estudiante eliminado")
+        else:
+            messagebox.showerror("Error", "Ingrese el ID del estudiante")
 
     def refresh_student_list(self):
         for item in self.treeStudents.get_children():
@@ -150,8 +150,7 @@ class Interfaz():
             self.treeStudents.insert("", tk.END, values=(estudiante.matricula, estudiante.nombre))
         
     def setup_course_ui(self, tab):
-        frame = tk.LabelFrame(
-            tab, text="Gestión de Cursos", padx=10, pady=10)
+        frame = tk.LabelFrame(tab, text="Gestión de Cursos", padx=10, pady=10)
         frame.pack(padx=10, pady=10)
 
         self.course_id_entry = tk.Entry(frame)
@@ -163,13 +162,10 @@ class Interfaz():
 
         tk.Label(frame, text="ID del Curso").grid(row=0, column=0)
         tk.Label(frame, text="Nombre del Curso").grid(row=1, column=0)
-        tk.Label(frame, text="Curso Requerido").grid(
-            row=2, column=0)  # Nombre del curso requerido
+        tk.Label(frame, text="Curso Requerido").grid(row=2, column=0)
 
-        tk.Button(frame, text="Agregar Curso",
-                  command=self.addCourse).grid(row=3, column=0, pady=5)
-        tk.Button(frame, text="Buscar Curso (ID)",
-                  command=self.buscarCurso).grid(row=3, column=1, pady=5)
+        tk.Button(frame, text="Agregar Curso", command=self.addCourse).grid(row=3, column=0, pady=5)
+        tk.Button(frame, text="Buscar Curso (ID)", command=self.buscarCurso).grid(row=3, column=1, pady=5)
         
         self.treeCourses = ttk.Treeview(frame, columns=("ID", "Curso"), show='headings')
         self.treeCourses.heading("ID", text="ID")
@@ -179,13 +175,11 @@ class Interfaz():
         frame.grid_rowconfigure(4, weight=1)
         frame.grid_columnconfigure(1, weight=1)
 
-
     def viewCursos(self):
         print(self.grafo)
 
     def setup_dependency_ui(self, tab):
-        frame = tk.LabelFrame(
-            tab, text="Dependencias de Cursos", padx=10, pady=10)
+        frame = tk.LabelFrame(tab, text="Dependencias de Cursos", padx=10, pady=10)
         frame.pack(padx=10, pady=10, fill="both", expand=True)
 
         self.tree = ttk.Treeview(frame, columns=("Curso", "Dependencias"), show='headings')
@@ -206,9 +200,6 @@ class Interfaz():
 
         tk.Button(pathFrame, text="Encontrar Camino", command=self.encontrarCamino).grid(row=2, column=0, pady=5, columnspan=2)
 
-        # tk.Button(pathFrame, text="Mostrar", command=self.viewCursos).grid(row=3, column=0, pady=5)
-        
-
     def actualizarCursos(self):
         for i in self.treeCourses.get_children():
             self.treeCourses.delete(i)
@@ -224,8 +215,7 @@ class Interfaz():
         for curso in self.grafo.dict:
             dependientes = [dep.getInfo() for dep in self.grafo.dict[curso]]
             for dep in dependientes:
-                self.tree.insert("", "end", values=(dep, curso.getInfo())) # se muestran solo los cursos que tienen dependencias
-
+                self.tree.insert("", "end", values=(dep, curso.getInfo()))
 
 root = tk.Tk()
 app = Interfaz(root)
