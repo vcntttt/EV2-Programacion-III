@@ -1,3 +1,4 @@
+from tkinter import messagebox
 import tkinter as tk
 from tkinter import ttk
 from avl import AVL
@@ -60,14 +61,14 @@ class Interfaz():
             self.student_name_entry.delete(0, tk.END)
 
     def search_student(self):
-        student_id = self.student_id_entry.get()
+        student_id = int(self.student_id_entry.get())
+        result = self.bst.buscar(student_id)
+        if result:
+            messagebox.showinfo(
+                "Resultado", f"Estudiante encontrado: ID - {result.estudiante.matricula}, Nombre - {result.estudiante.nombre}")
+        else:
+            messagebox.showerror("Error", "Estudiante no encontrado")
 
-        if student_id:
-            nodo = self.bst.buscar(int(student_id))
-            if nodo:
-                self.result_label.config(text=f"Estudiante encontrado: ID - {nodo.estudiante.matricula}, Nombre - {nodo.estudiante.nombre}")
-            else:
-                self.result_label.config(text="Estudiante no encontrado.")
 
     def delete_student(self):
         student_id = self.student_id_entry.get()
