@@ -17,11 +17,16 @@ class Interfaz:
         self.setupUI()
 
     def addCourse(self):
-        cursoID = int(self.course_id_entry.get())
+        cursoID = self.course_id_entry.get()
         nombreCurso = self.course_name_entry.get()
         dependencias = self.course_dependencies_entry.get()
         dependenciasList = dependencias.split(",") if dependencias != "" else []
 
+        if not cursoID.isdigit():
+            messagebox.showerror("Error", "El ID del curso debe ser un número entero.")
+            return
+        
+        cursoID = int(cursoID)
         if self.avl.encontrarCurso(cursoID):
             messagebox.showerror("Error", "El ID del curso ya existe.")
             return
@@ -49,7 +54,13 @@ class Interfaz:
         messagebox.showinfo("Éxito", "Curso agregado")
 
     def buscarCurso(self):
-        cursoID = int(self.course_id_entry.get())
+        cursoID = self.course_id_entry.get()
+
+        if not cursoID.isdigit():
+            messagebox.showerror("Error", "El ID del curso debe ser un número entero.")
+            return
+
+        cursoID = int(cursoID)
         resultado = self.avl.encontrarCurso(cursoID)
         if resultado:
             info = f"ID: {resultado.curso.codigo}\nNombre: {resultado.curso.nombre}\nDependencias: {', '.join([dep for dep in resultado.curso.dependencias])}"
@@ -118,12 +129,18 @@ class Interfaz:
         student_id = self.student_id_entry.get()
         student_name = self.student_name_entry.get()
 
-        if self.bst.buscar(int(student_id)):
+        if not student_id.isdigit():
+            messagebox.showerror("Error", "El ID del estudiante debe ser un número entero.")
+            return
+
+        student_id = int(student_id)
+
+        if self.bst.buscar(student_id):
             messagebox.showerror("Error", "El ID del estudiante ya existe.")
             return
 
         if student_id and student_name:
-            estudiante = Estudiante(int(student_id), student_name)
+            estudiante = Estudiante(student_id, student_name)
             self.bst.insertar(estudiante)
             self.treeStudents.insert("", tk.END, values=(student_id, student_name))
             self.student_id_entry.delete(0, tk.END)
@@ -134,23 +151,29 @@ class Interfaz:
 
     def search_student(self):
         student_id = self.student_id_entry.get()
-        if student_id:
-            result = self.bst.buscar(int(student_id))
-            if result:
-                messagebox.showinfo("Resultado", f"Estudiante encontrado: ID - {result.estudiante.matricula}, Nombre - {result.estudiante.nombre}")
-            else:
-                messagebox.showerror("Error", "Estudiante no encontrado")
+
+        if not student_id.isdigit():
+            messagebox.showerror("Error", "El ID del estudiante debe ser un número entero.")
+            return
+
+        student_id = int(student_id)
+        result = self.bst.buscar(student_id)
+        if result:
+            messagebox.showinfo("Resultado", f"Estudiante encontrado: ID - {result.estudiante.matricula}, Nombre - {result.estudiante.nombre}")
         else:
-            messagebox.showerror("Error", "Ingrese el ID del estudiante")
+            messagebox.showerror("Error", "Estudiante no encontrado")
 
     def delete_student(self):
         student_id = self.student_id_entry.get()
-        if student_id:
-            self.bst.eliminar(int(student_id))
-            self.refresh_student_list()
-            messagebox.showinfo("Éxito", "Estudiante eliminado")
-        else:
-            messagebox.showerror("Error", "Ingrese el ID del estudiante")
+
+        if not student_id.isdigit():
+            messagebox.showerror("Error", "El ID del estudiante debe ser un número entero.")
+            return
+
+        student_id = int(student_id)
+        self.bst.eliminar(student_id)
+        self.refresh_student_list()
+        messagebox.showinfo("Éxito", "Estudiante eliminado")
 
     def refresh_student_list(self):
         for item in self.treeStudents.get_children():
