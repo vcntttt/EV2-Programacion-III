@@ -3,6 +3,8 @@ from tkinter import ttk
 from avl import AVL
 from grafo import Grafo
 
+
+
 class Interfaz():
     def __init__(self, root):
         self.root = root
@@ -12,6 +14,8 @@ class Interfaz():
         # self.bst = BST()
         self.avl = AVL()
         self.graph = Grafo()
+
+        self.students = []  
 
         self.setup_ui()
 
@@ -34,6 +38,16 @@ class Interfaz():
         self.setup_course_ui(self.course_tab)
         self.setup_dependency_ui(self.dependency_tab)
 
+    def add_student(self):
+        student_id = self.student_id_entry.get()
+        student_name = self.student_name_entry.get()
+
+        if student_id and student_name:
+            self.students.append((student_id, student_name))
+            self.student_listbox.insert(tk.END, f"ID: {student_id}, Nombre: {student_name}")
+            self.student_id_entry.delete(0, tk.END)
+            self.student_name_entry.delete(0, tk.END)
+
     def setup_student_ui(self, parent_frame):
         frame = tk.LabelFrame(
             parent_frame, text="Gestión de Estudiantes", padx=10, pady=10)
@@ -47,12 +61,12 @@ class Interfaz():
         tk.Label(frame, text="ID del Estudiante").grid(row=0, column=0)
         tk.Label(frame, text="Nombre del Estudiante").grid(row=1, column=0)
 
-        # tk.Button(frame, text="Agregar Estudiante",
-        #           command=self.add_student).grid(row=2, column=0)
-        # tk.Button(frame, text="Buscar Estudiante",
-        #           command=self.search_student).grid(row=2, column=1)
-        # tk.Button(frame, text="Eliminar Estudiante",
-        #           command=self.delete_student).grid(row=2, column=2)
+        tk.Button(frame, text="Agregar Estudiante",
+                  command=self.add_student).grid(row=2, column=0, columnspan=2)
+
+        # Listbox to display students
+        self.student_listbox = tk.Listbox(frame, width=40)
+        self.student_listbox.grid(row=3, column=0, columnspan=2, pady=10)
 
     def setup_course_ui(self, parent_frame):
         frame = tk.LabelFrame(
