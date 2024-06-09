@@ -14,7 +14,6 @@ class BST:
         if self.raiz is None:
             self.raiz = NodoBST(estudiante)
         else:
-            self._insertar(self.raiz, matricula, info_estudiante)
             self._insertar(self.raiz, estudiante)
 
     def _insertar(self, nodo, estudiante):
