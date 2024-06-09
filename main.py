@@ -24,8 +24,7 @@ class Interfaz():
         dependencias = self.course_dependencies_entry.get()
         dependenciasList = dependencias.split(",") if dependencias != "" else []
         curso = Curso(cursoID, nombreCurso, dependenciasList)
-        nodoCurso = NodoGrafo(curso.getInfo())
-        # nodoCurso = NodoGrafo(curso.getName())
+        nodoCurso = NodoGrafo(curso.getInfo()) # nombre(codigo)
 
         self.avl.anadirCurso(curso)
         self.grafo.addVertice(nodoCurso)
@@ -36,7 +35,6 @@ class Interfaz():
                 nodo = self.grafo.getVertice(d)
                 if nodo:
                     self.grafo.addEdge(Edge(nodo, nodoCurso))
-                    # self.grafo.addEdge(Edge(nodoCurso, nodo))
                 else:
                     messagebox.showerror("Error", f"No existe el curso {d}")
                     return
@@ -153,7 +151,6 @@ class Interfaz():
         self.tree.heading("Dependencias", text="Dependencias")
         self.tree.pack(fill="both", expand=True)
 
-         # Añadir sección para encontrar el camino más corto
         pathFrame = tk.LabelFrame(tab, text="Encontrar Camino Más Corto", padx=10, pady=10)
         pathFrame.pack(padx=10, pady=10, fill="both", expand=True)
 

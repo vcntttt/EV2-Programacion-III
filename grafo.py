@@ -50,7 +50,7 @@ class Grafo: # Grafo dirigido
                 allEdges += v1.getInfo() + " -> " + v2.getInfo() + "\n"
         return allEdges
     
-    def findPath(self, start, end):
+    def findPath(self, start, end): # Algoritmo de dijkstra
         distancias = {vertice: float('infinity') for vertice in self.dict}
         distancias[start] = 0
         previos = {vertice: None for vertice in self.dict}
