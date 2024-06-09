@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from avl import AVL
 from grafo import Grafo
+from BST import BST,Estudiante
 
 
 class Interfaz():
@@ -10,7 +11,7 @@ class Interfaz():
         self.root.title("6 - Sistema de Administración Escolar")
         self.root.geometry("500x400")
         self.root.resizable(False, False)
-        # self.bst = BST()
+        self.bst = BST()
         self.avl = AVL()
         self.graph = Grafo()
 
@@ -52,14 +53,42 @@ class Interfaz():
         student_name = self.student_name_entry.get()
 
         if student_id and student_name:
-            self.students.append((student_id, student_name))
+            estudiante = Estudiante(int(student_id), student_name)
+            self.bst.insertar(estudiante)
             self.student_listbox.insert(tk.END, f"ID: {student_id}, Nombre: {student_name}")
             self.student_id_entry.delete(0, tk.END)
             self.student_name_entry.delete(0, tk.END)
 
+    def search_student(self):
+        student_id = self.student_id_entry.get()
+
+        if student_id:
+            nodo = self.bst.buscar(int(student_id))
+            if nodo:
+                self.result_label.config(text=f"Estudiante encontrado: ID - {nodo.estudiante.matricula}, Nombre - {nodo.estudiante.nombre}")
+            else:
+                self.result_label.config(text="Estudiante no encontrado.")
+
+    def delete_student(self):
+        student_id = self.student_id_entry.get()
+
+        if student_id:
+            self.bst.eliminar(int(student_id))
+            self.result_label.config(text=f"Estudiante con ID {student_id} eliminado.")
+            self.student_listbox.delete(0, tk.END)  # Limpiar la lista y volver a llenarla
+            self.refresh_student_list()
+
+    def refresh_student_list(self):
+        def inorder(nodo):
+            if nodo:
+                inorder(nodo.izquierda)
+                self.student_listbox.insert(tk.END, f"ID: {nodo.estudiante.matricula}, Nombre: {nodo.estudiante.nombre}")
+                inorder(nodo.derecha)
+        self.student_listbox.delete(0, tk.END)  # Clear listbox
+        inorder(self.bst.raiz)
+
     def setup_student_ui(self, parent_frame):
-        frame = tk.LabelFrame(
-            parent_frame, text="Gestión de Estudiantes", padx=10, pady=10)
+        frame = tk.LabelFrame(parent_frame, text="Gestión de Estudiantes", padx=10, pady=10)
         frame.pack(padx=10, pady=10)
 
         self.student_id_entry = tk.Entry(frame)
@@ -70,12 +99,16 @@ class Interfaz():
         tk.Label(frame, text="ID del Estudiante").grid(row=0, column=0)
         tk.Label(frame, text="Nombre del Estudiante").grid(row=1, column=0)
 
-        tk.Button(frame, text="Agregar Estudiante",
-                  command=self.add_student).grid(row=2, column=0, columnspan=2)
+        tk.Button(frame, text="Agregar Estudiante", command=self.add_student).grid(row=2, column=0, columnspan=2)
+        tk.Button(frame, text="Buscar Estudiante", command=self.search_student).grid(row=3, column=0, columnspan=2)
+        tk.Button(frame, text="Eliminar Estudiante", command=self.delete_student).grid(row=4, column=0, columnspan=2)
 
         # Listbox to display students
         self.student_listbox = tk.Listbox(frame, width=40)
-        self.student_listbox.grid(row=3, column=0, columnspan=2, pady=10)
+        self.student_listbox.grid(row=5, column=0, columnspan=2, pady=10)
+
+        self.result_label = tk.Label(frame, text="")
+        self.result_label.grid(row=6, column=0, columnspan=2)
 
     def setup_course_ui(self, parent_frame):
         frame = tk.LabelFrame(

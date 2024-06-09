@@ -1,42 +1,44 @@
-class NodoArbol:
-    def __init__(self, matricula, info_estudiante):
-        self.matricula = matricula  # Número de matrícula del estudiante
-        self.info_estudiante = info_estudiante  # Información del estudiante
-        self.izquierdo = None
-        self.derecho = None
+from nodo import NodoBST
+
+class Estudiante:
+    def __init__(self, matricula, nombre):
+        self.matricula = matricula
+        self.nombre = nombre
+
 
 class BST:
     def __init__(self):
         self.raiz = None
 
-    def insertar(self, matricula, info_estudiante):
+    def insertar(self, estudiante):
         if self.raiz is None:
-            self.raiz = NodoArbol(matricula, info_estudiante)
+            self.raiz = NodoBST(estudiante)
         else:
             self._insertar(self.raiz, matricula, info_estudiante)
+            self._insertar(self.raiz, estudiante)
 
-    def _insertar(self, nodo, matricula, info_estudiante):
-        if matricula < nodo.matricula:
-            if nodo.izquierdo is None:
-                nodo.izquierdo = NodoArbol(matricula, info_estudiante)
+    def _insertar(self, nodo, estudiante):
+        if estudiante.matricula < nodo.estudiante.matricula:
+            if nodo.izquierda is None:
+                nodo.izquierda = NodoBST(estudiante)
             else:
-                self._insertar(nodo.izquierdo, matricula, info_estudiante)
+                self._insertar(nodo.izquierda, estudiante)
         else:
-            if nodo.derecho is None:
-                nodo.derecho = NodoArbol(matricula, info_estudiante)
+            if nodo.derecha is None:
+                nodo.derecha = NodoBST(estudiante)
             else:
-                self._insertar(nodo.derecho, matricula, info_estudiante)
+                self._insertar(nodo.derecha, estudiante)
 
     def buscar(self, matricula):
         return self._buscar(self.raiz, matricula)
 
     def _buscar(self, nodo, matricula):
-        if nodo is None or nodo.matricula == matricula:
+        if nodo is None or nodo.estudiante.matricula == matricula:
             return nodo
-        if matricula < nodo.matricula:
-            return self._buscar(nodo.izquierdo, matricula)
+        if matricula < nodo.estudiante.matricula:
+            return self._buscar(nodo.izquierda, matricula)
         else:
-            return self._buscar(nodo.derecho, matricula)
+            return self._buscar(nodo.derecha, matricula)
 
     def eliminar(self, matricula):
         self.raiz, _ = self._eliminar(self.raiz, matricula)
@@ -45,66 +47,25 @@ class BST:
         if nodo is None:
             return nodo, None
 
-        if matricula < nodo.matricula:
-            nodo.izquierdo, eliminado = self._eliminar(nodo.izquierdo, matricula)
-        elif matricula > nodo.matricula:
-            nodo.derecho, eliminado = self._eliminar(nodo.derecho, matricula)
+        if matricula < nodo.estudiante.matricula:
+            nodo.izquierda, eliminado = self._eliminar(nodo.izquierda, matricula)
+        elif matricula > nodo.estudiante.matricula:
+            nodo.derecha, eliminado = self._eliminar(nodo.derecha, matricula)
         else:
             eliminado = nodo
-            if nodo.izquierdo is None:
-                return nodo.derecho, eliminado
-            elif nodo.derecho is None:
-                return nodo.izquierdo, eliminado
+            if nodo.izquierda is None:
+                return nodo.derecha, eliminado
+            elif nodo.derecha is None:
+                return nodo.izquierda, eliminado
 
-            temp = self._minimo(nodo.derecho)
-            nodo.matricula = temp.matricula
-            nodo.info_estudiante = temp.info_estudiante
-            nodo.derecho, _ = self._eliminar(nodo.derecho, temp.matricula)
+            temp = self._minimo(nodo.derecha)
+            nodo.estudiante = temp.estudiante
+            nodo.derecha, _ = self._eliminar(nodo.derecha, temp.estudiante.matricula)
 
         return nodo, eliminado
 
     def _minimo(self, nodo):
         actual = nodo
-        while actual.izquierdo is not None:
-            actual = actual.izquierdo
+        while actual.izquierda is not None:
+            actual = actual.izquierda
         return actual
-    
-
-"""Interfaz"""
-
-def menu():
-    print("1. Registrar estudiante")
-    print("2. Buscar estudiante")
-    print("3. Eliminar estudiante")
-    print("4. Salir")
-
-arbol = BST()
-
-while True:
-    menu()
-    opcion = int(input("Seleccione una opción: "))
-
-    if opcion == 1:
-        matricula = int(input("Número de matrícula: "))
-        nombre = input("Nombre del estudiante: ")
-        arbol.insertar(matricula, {"nombre": nombre})
-        print("Estudiante registrado.\n")
-
-    elif opcion == 2:
-        matricula = int(input("Número de matrícula: "))
-        estudiante = arbol.buscar(matricula)
-        if estudiante:
-            print(f"Estudiante encontrado: {estudiante.info_estudiante}\n")
-        else:
-            print("Estudiante no encontrado.\n")
-
-    elif opcion == 3:
-        matricula = int(input("Número de matrícula: "))
-        arbol.eliminar(matricula)
-        print("Estudiante eliminado.\n")
-
-    elif opcion == 4:
-        break
-
-    else:
-        print("Opción no válida.\n")

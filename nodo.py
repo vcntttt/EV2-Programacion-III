@@ -6,3 +6,9 @@ class NodoGrafo:
 
     def getInfo(self):
         return self.info
+
+class NodoBST:
+    def __init__(self, estudiante):
+        self.estudiante = estudiante
+        self.izquierda = None
+        self.derecha = None
