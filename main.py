@@ -230,7 +230,7 @@ class Interfaz:
         tk.Label(pathFrame, text="Curso Final").grid(row=0, column=1)
         self.curso_fin_entry = tk.Entry(pathFrame)
         self.curso_fin_entry.grid(row=1, column=1)
-        tk.Button(pathFrame, text="mostrar", command=self.viewCursos).grid(row=1, column=0, pady=5, columnspan=2)
+        tk.Button(pathFrame, text="Mostrar", command=self.viewCursos).grid(row=1, column=4, pady=5, columnspan=2)
 
         tk.Button(pathFrame, text="Encontrar Camino", command=self.encontrarCamino).grid(row=2, column=0, pady=5, columnspan=2)
 
