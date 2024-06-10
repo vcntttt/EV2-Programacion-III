@@ -20,6 +20,7 @@ class Curso:
 
     def setCode(self, code):
         self.codigo = code
+        
     def getInfo(self):
         return f"{self.nombre}({self.codigo})"
     

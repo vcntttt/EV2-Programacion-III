@@ -34,6 +34,7 @@ class Grafo: # Grafo dirigido
         if v2 not in self.dict[v1]:
             self.dict[v1].append(v2)
 
+
     def getVertice(self, info):
         for v in self.dict:
             if v.getInfo() == info: 

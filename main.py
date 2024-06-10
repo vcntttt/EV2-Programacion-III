@@ -32,7 +32,7 @@ class Interfaz:
             return
 
         curso = Curso(cursoID, nombreCurso, dependenciasList)
-        nodoCurso = NodoGrafo(curso.getInfo())
+        nodoCurso = NodoGrafo(curso.getInfo()) # nombre(codigo)
 
         self.avl.anadirCurso(curso)
         self.grafo.addVertice(nodoCurso)
@@ -69,16 +69,16 @@ class Interfaz:
             messagebox.showerror("Error", "Curso no encontrado")
 
     def encontrarCamino(self):
-        curso_inicio = self.curso_inicio_entry.get().strip()
-        curso_fin = self.curso_fin_entry.get().strip()
-        nodo_inicio = self.grafo.getVertice(curso_inicio)
-        nodo_fin = self.grafo.getVertice(curso_fin)
+        cursoInicio = self.curso_inicio_entry.get().strip()
+        cursoFin = self.curso_fin_entry.get().strip()
+        nodoInicio = self.grafo.getVertice(cursoInicio)
+        nodoFin = self.grafo.getVertice(cursoFin)
 
-        if nodo_inicio is None or nodo_fin is None:
+        if nodoInicio is None or nodoFin is None:
             messagebox.showerror("Error", "Uno o ambos cursos no existen.")
             return
 
-        camino = self.grafo.findPath(nodo_inicio, nodo_fin)
+        camino = self.grafo.findPath(nodoInicio, nodoFin)
         if camino:
             camino_str = " -> ".join([n.getInfo() for n in camino])
             messagebox.showinfo("Camino más corto", f"El camino más corto es: {camino_str}")
@@ -230,6 +230,7 @@ class Interfaz:
         tk.Label(pathFrame, text="Curso Final").grid(row=0, column=1)
         self.curso_fin_entry = tk.Entry(pathFrame)
         self.curso_fin_entry.grid(row=1, column=1)
+        tk.Button(pathFrame, text="mostrar", command=self.viewCursos).grid(row=1, column=0, pady=5, columnspan=2)
 
         tk.Button(pathFrame, text="Encontrar Camino", command=self.encontrarCamino).grid(row=2, column=0, pady=5, columnspan=2)
 
